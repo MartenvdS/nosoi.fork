@@ -187,24 +187,29 @@ applyFunctionToHosts <- function(res, pres.time, pasedFunction, active.hosts) {
 #'
 #' @keywords internal
 ##
-getExitingMoving <- function(res, pres.time, pasedFunction) {
-
-  active.hosts <- res$table.hosts[["active"]] #active hosts (boolean vector)
-
+getExitingMoving <- function (res, pres.time, pasedFunction)
+{
+  active.hosts <- res$table.hosts[["active"]]
   if (any(active.hosts)) {
-
-    p.exitMove.values <- applyFunctionToHosts(res, pres.time, pasedFunction, active.hosts)
-
-    exitMove <- drawBernouilli(p.exitMove.values) #Draws K bernouillis with various probability (see function for more detail)
+    if (res$prefix.host == "H") {
+      p.exitMove.values <- as.numeric(pres.time - res$table.hosts$inf.time[res$table.hosts$active ==
+                                                                             TRUE] >= 6)
+    }
+    else if (res$prefix.host == "M") {
+      p.exit.val <- pasedFunction$vect(1, 1)
+      p.exitMove.values <- rep(p.exit.val, sum(active.hosts))
+    }
+    else p.exitMove.values <- applyFunctionToHosts(res,
+                                                   pres.time, pasedFunction, active.hosts)
+    exitMove <- drawBernouilli(p.exitMove.values)
   }
-
-  if (!any(active.hosts)) exitMove <- FALSE
-
+  if (!any(active.hosts))
+    exitMove <- FALSE
   exitMove.full <- active.hosts
   exitMove.full[exitMove.full] <- exitMove
-
   return(exitMove.full)
 }
+
 
 #' @title Summarise position of hosts in a discrete or discretized (raster) space
 #'

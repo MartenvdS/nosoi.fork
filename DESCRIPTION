@@ -1,4 +1,4 @@
-Package: nosoi
+Package: nosoiMT
 Type: Package
 Title: A Forward Agent-Based Transmission Chain Simulator
 Version: 1.1.1
