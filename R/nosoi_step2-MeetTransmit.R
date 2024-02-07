@@ -22,7 +22,7 @@ meetTransmit <- function (res, pres.time, positions, nContactParsed, pTransParse
     df.meetTransmit$number.contacts <- as.numeric(runif(sum(active.hosts)) <
                                                     0.7)
   }
-  else if (res$prefix.host == "Haha, Does not work :(") {
+  else if (res$prefix.host == "Haha, Does not work :-(") {
     df.meetTransmit$number.contacts <- lapply(1:sum(active.hosts),
                                               as.list(environment(nContactParsed$vect))$pFunc)
   }
