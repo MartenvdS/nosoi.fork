@@ -123,15 +123,14 @@ simulator <- function(param){
 #edit(nosoi:::endMessageText)
 
 # Benchmark -------------------------
-# library(profvis)
-# profvis({
-  # system.time({
+library(profvis)
+profvis({
+  system.time({
     parameter <- 0.1
-    i <- 1
   simulated_data <- list()
-    # for (i in 1:10){
+    for (i in 1:10){
       set.seed(1024)
       simulated_data[[i]] <- simulator(parameter)
-    # }
-  # })
-# })
+    }
+  })
+})
