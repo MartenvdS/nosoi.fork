@@ -14,7 +14,10 @@ p_Exit_fct_human <- function(t){
 }
 
 #nContact
-n_contact_fct_human <- function(t){rpois(1,2.1)}
+n_contact_fct_human <- function(t){
+  print(.Random.seed[1:5])
+  rpois(1,2.1)
+}
 # n_contact_fct_human <- function(t,n){rpois(n,2.1)}
 #pTrans
 alt_p_Trans_fct_human <- function(t) {
