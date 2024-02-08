@@ -15,7 +15,6 @@ p_Exit_fct_human <- function(t){
 
 #nContact
 n_contact_fct_human <- function(t){
-  print(.Random.seed[1:5])
   rpois(1,2.1)
 }
 # n_contact_fct_human <- function(t,n){rpois(n,2.1)}
@@ -123,8 +122,8 @@ simulator <- function(param){
 #edit(nosoi:::endMessageText)
 
 # Benchmark -------------------------
-library(profvis)
-profvis({
+#library(profvis)
+#profvis({
   system.time({
     parameter <- 0.1
   simulated_data <- list()
@@ -133,4 +132,4 @@ profvis({
       simulated_data[[i]] <- simulator(parameter)
     }
   })
-})
+#})
