@@ -23,28 +23,8 @@ meetTransmit <- function (res, pres.time, positions, nContactParsed, pTransParse
                                                     0.7)
   }
   else if (res$prefix.host == "H") {
-    # mynum <- sample(1200,1)
-    # set.seed(mynum)
-    # print(.Random.seed[1:8])
-    # print(sum(active.hosts))
     if(sum(active.hosts)==0){rpois(1,2.1)}
-    df.meetTransmit$number.contacts <- rpois(sum(active.hosts),lambda=2.1)#lapply(1:sum(active.hosts),
-    # print(.Random.seed[1:8])
-    # cat("\n\n")
-    # print(df.meetTransmit$number.contacts)                                          #as.list(environment(nContactParsed$vect))$pFunc)
-  #}
-  #else {
-    # mynum <- sample(1200,1)
-    # set.seed(mynum)
-
-    # print(.Random.seed[1:8])
-    # df.meetTransmit$number.contacts <- applyFunctionToHosts(res,
-                                                            # pres.time, nContactParsed, active.hosts)
-    # print(.Random.seed[1:8])
-    # print(as.list(environment(nContactParsed$vect))$pFunc)
-    # print(df.meetTransmit$number.contacts)
-    # cat("\n---------\n")
-    # if(pres.time > 5)  stop("o o o")
+    df.meetTransmit$number.contacts <- rpois(sum(active.hosts),lambda=2.1)
   }
   haveContact <- df.meetTransmit[["number.contacts"]] > 0
   df.meetTransmit <- df.meetTransmit[haveContact]
