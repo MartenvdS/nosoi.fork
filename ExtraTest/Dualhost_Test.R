@@ -109,7 +109,13 @@ simulator <- function(param){
   SS_2 <- (which(result_table$Cumulative >= 0.5 * sum(result_table$Frequency))[1]) / length(result_table$Frequency)
 
   # Data analysis 3 - Variance
-  SS_3 <- var(result_table$Frequency)
+  if (length(result_table$Frequency) > 1) {
+    # Calculate the variance
+    SS_3 <- var(result_table$Frequency)
+  } else {
+    # Set SS_3 to 0 if there are no entries
+    SS_3 <- 0
+  }
 
   # Data analysis 4 - IQR
 
@@ -127,9 +133,16 @@ simulator <- function(param){
   system.time({
     parameter <- 0.1
   simulated_data <- list()
-    for (i in 1:10){
-      set.seed(1024)
-      simulated_data[[i]] <- simulator(parameter)
-    }
+  for (j in 1:10){
+  for (i in 1:10){
+      param <- 0.1 + j/10
+      index <- j * 10 - 10 + i
+      simulated_data[[index]] <- simulator(parameter)
+  }
+  }
   })
 #})
+
+sim_table <- as.data.table(simulated_data)
+sim_table
+
