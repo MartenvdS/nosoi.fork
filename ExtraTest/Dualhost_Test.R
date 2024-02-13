@@ -3,7 +3,7 @@ library(nosoiMT)
 #library(data.table)
 library(dplyr)
 
-#detach("package:profvis", unload = TRUE)
+#detach("package:snow", unload = TRUE)
 # Benchmark parameters / set up -----------------
 
 # Host A, Vertebrate/Humans -------------------------------------------------------------
@@ -58,7 +58,6 @@ param_pTrans_mosquito <- list(t_EIP=t_EIP_FrenchPolynesia)
 # Simulator -----------------------
 simulator <- function(param){
   p_Exit_fct_mosquito <- function(t){return(param)}
-
   SimulationDual <- nosoiSim(type="dual", popStructure="none",
                              length.sim=100,
                              max.infected.A=100000,
@@ -130,19 +129,56 @@ simulator <- function(param){
 # Benchmark -------------------------
 #library(profvis)
 #profvis({
-  system.time({
-    parameter <- 0.1
-  simulated_data <- list()
-  for (j in 1:10){
-  for (i in 1:10){
-      param <- 0.1 + j/10
-      index <- j * 10 - 10 + i
-      simulated_data[[index]] <- simulator(parameter)
+
+#Try to parralel this thing
+library(doParallel)
+library(foreach)
+nr_cores <- detectCores()-1
+cl <- makeCluster(nr_cores, type="PSOCK")
+registerDoParallel(cl)
+#foreach
+system.time({
+  simulated_data <- foreach(i=1:10, .inorder = F) %dopar% {
+    library(nosoiMT)
+    set.seed(1024)
+    simulator(0.1)
   }
+})
+
+stopCluster(cl)
+
+#Regular Bench
+system.time({
+  simulated_data <- list()
+  for (i in 1:10){
+    set.seed(1024)
+    simulated_data[[i]] <- simulator(0.1)
   }
   })
 #})
-
+simulated_data
 sim_table <- as.data.table(simulated_data)
 sim_table
+
+#paralel ABC logic = Does not work
+nr_cores <- detectCores() - 1
+cl <- makeCluster(nr_cores, type = "PSOCK")
+registerDoParallel(cl)
+
+system.time({
+
+  accepted_parameters <- 0
+  simulated_data <- list()
+
+  foreach(i = 1:100, .inorder = F) %dopar% {
+    library(nosoiMT)
+    set.seed(1024)
+    result <- simulator(0.1)
+    simulated_data[i] <- result
+    accepted_parameters <<- accepted_parameters + 1
+  }
+})
+
+simulated_data
+
 
